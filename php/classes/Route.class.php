@@ -27,6 +27,11 @@
                         echo json_encode($data->AllCar()); 
                         break;
                     }
+                    case "categories":
+                    {
+                        $data=new CarRent();
+                        echo json_encode($data->Categories());
+                    }
                 default:
                 {
                     break;

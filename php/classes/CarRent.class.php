@@ -48,6 +48,36 @@
             return $testData;
             
         }
+        public function Categories(){
+            $testData= [
+                [
+                    "catName" => "SUV",
+                    "brand" => "Toyota",
+                    "model" => "RAV4",
+                    "price" => 60
+                ],
+                [
+                    "catName" => "Sedan",
+                    "brand" => "Honda",
+                    "model" => "Accord",
+                    "price" => 50
+                ],
+                [
+                    "catName" => "Hatchback",
+                    "brand" => "Volkswagen",
+                    "model" => "Golf",
+                    "price" => 45
+                ],
+                [
+                    "catName" => "Truck",
+                    "brand" => "Ford",
+                    "model" => "F-150",
+                    "price" => 70
+                ]
+            ]; 
+
+            return $testData;
+        }
 }
 
 ?>
