@@ -40,6 +40,18 @@ class Route
                     echo json_encode($data->Availability($this->inComeData->id));
                     break;
                 }
+            case "previousRentals":
+                {
+                    $data = new CarRent();
+                    echo json_encode($data->PreviousRentals($this->inComeData->username));
+                    break;
+                }
+            case "discounts":
+                {
+                    $data = new CarRent();
+                    echo json_encode($data->Discounts());
+                    break;
+                }
             default:
                 {
                     break;
