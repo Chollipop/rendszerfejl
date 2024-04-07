@@ -3,13 +3,9 @@
 class CarRent extends DataBaseConnection
 {
 
-    public function Login($username, $pwd)
+    public function Login($user, $passwd)
     {
-        if ($username == "user" && $pwd == "user123")
-        {
-            return true;
-        }
-        return false;
+        return;
     }
     public function AllCar()
     {
