@@ -18,8 +18,8 @@ class Route
         {
             case "login":
                 {
-                    $data = new CarRent();
-                    echo json_encode($data->Login($this->inComeData->username, $this->inComeData->pwd));
+                    $data = new Hajok();
+                    echo $data->Login($inComeData);
                     break;
                 }
             case "allcar":
