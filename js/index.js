@@ -1,13 +1,24 @@
 //Functions
 
-function Login()
+async function Login()
 {
     let user = document.getElementById("InputUsername").value;
     let passwd = document.getElementById("InputPassword").value;
-    if (user == "user" && passwd == "user123")
+    let send =
+    {
+        "username": user,
+        "pwd": passwd
+    };
+    let connection = await fetch("php/index.php/login",
+        {
+            method: "POST",
+            body: JSON.stringify(send)
+        });
+    let data = await connection.json();
+    if (data)
         window.location = "list.html";
     else
-        alert("non valid login");
+        alert("invalid login");
 }
 
 // Event Listeners
