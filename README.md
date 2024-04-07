@@ -1,7 +1,7 @@
-# group_5
-Rendszerfejlesztés tantárgy beadandó
-
-Tagok
-- [Bercza Ferenc Dániel](https://github.com/Chollipop) (H0ZMX9) 
-- [Engler Gyula](https://github.com/REET69) (KOEKKH)
-- [Ferncz Kristóf](https://github.com/kangurusenpai) (WH5YUK)  
+# Beüzemelés
+- Telepítsük a [XAMPP-ot](https://www.apachefriends.org/download.html)
+- Klónozzuk le a [beadando1](https://github.com/kangurusenpai/group_5/tree/beadando1) branchet
+- Másoljuk be a XAMPP htdocs mappájába (alapértelmezetten C:/xampp/htdocs)
+- Indítsuk el a XAMPP-ot, majd azon belül az Apache és MySQL szervereket
+- Tetszőleges böngészőben localhost-on válasszuk ki a mappán belül az [index.html-t](http://localhost/group_5-beadando1/group_5-beadando1/index.html)
+- Beégetett belépési adatok: user:user123

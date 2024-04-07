@@ -4,7 +4,7 @@ class DatabaseConnection
     private  $host = "localhost";
     private  $user = "root";
     private  $passwd = "";
-    private  $db_name = "autorent";
+    private  $db_name = "";
     private $db;
 
     public function __construct()
