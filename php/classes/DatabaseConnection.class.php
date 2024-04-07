@@ -1,7 +1,7 @@
 <?php
 class DatabaseConnection
 {
-    private  $host = "localhost";
+    /*private  $host = "localhost";
     private  $user = "root";
     private  $passwd = "";
     private  $db_name = "autorent";
@@ -32,5 +32,5 @@ class DatabaseConnection
             $data = array('response' => $this->db->error);
         }
         return json_encode($data, JSON_UNESCAPED_UNICODE);
-    }
+    }*/
 }
