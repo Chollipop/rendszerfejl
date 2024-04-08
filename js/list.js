@@ -55,18 +55,7 @@ async function SetupList()
                 method: "POST",
                 body: JSON.stringify(availabilityData)
             });
-        let availabilityResult = await availabilityConn.json();
-        let invalidDates = [];
-        if (availabilityResult.length != 0)
-        {
-            availabilityResult.forEach(e =>
-            {
-                let start = new Date(e["from_date"]["date"]);
-
-                let end = new Date(e["to_date"]["date"]);
-                invalidDates = invalidDates.concat(getDates(start, end));
-            });
-        }
+        let invalidDates = await availabilityConn.json();
 
         $(btn).daterangepicker(
             {
@@ -78,10 +67,11 @@ async function SetupList()
                 {
                     if (invalidDates.length != 0)
                     {
-                        if (isInvalidDateCheck(invalidDates, date))
-                        {
-                            return true;
-                        }
+                        date = (new Date(date.format('YYYY-MM-DD')).toLocaleDateString("hu-HU"))
+                            .replaceAll('.', '')
+                            .replaceAll(' ', '-')
+
+                        return isInvalidDateCheck(invalidDates, date);
                     }
                 }
             },
@@ -110,11 +100,24 @@ async function SetupList()
     }
 }
 
+//js dates and timezones can go to hell
 function isInvalidDateCheck(array, date)
 {
-    let dateToCheck = new Date(date.format('YYYY-MM-DD'));
+    let isInValid = false;
+    let dateToCheck = (new Date(date)).getTime();
 
-    return isInDateArray(array, dateToCheck)
+    for (let i = 0; i < array.length; i++)
+    {
+        let from = (new Date(array[i][0]["date"].split(' ')[0])).getTime();
+        let to = (new Date(array[i][1]["date"].split(' ')[0])).getTime();
+
+        if (dateToCheck >= from && dateToCheck <= to)
+        {
+            isInValid = true;
+            break;
+        }
+    }
+    return isInValid;
 }
 
 const getDates = (startDate, endDate) =>
@@ -130,31 +133,29 @@ const getDates = (startDate, endDate) =>
     return dates
 }
 
-//js dates and timezones can go to hell
-function isInDateArray(array, dateToCheck)
-{
-    return array.some(function (arrVal)
-    {
-        arrVal = arrVal.toLocaleDateString("hu-HU")
-            .replaceAll('.', '')
-            .replaceAll(' ', '-');
-
-        return dateToCheck.toISOString().split('T')[0] == arrVal;
-    });
-}
-
 async function CalcPrice(start, end, id, invalidDates)
 {
-    var dates = getDates(start, end);
     let invalidReservation = false;
-    dates.shift();
-    dates.forEach(d =>
+
+    var dates = getDates(start, end);
+    for (let i = 0; i < dates.length; i++)
     {
-        if (isInDateArray(invalidDates, d))
+        dates[i] = dates[i].toLocaleDateString("hu-HU")
+            .replaceAll('.', '')
+            .replaceAll(' ', '-');
+    }
+
+    dates = [...new Set(dates)];
+
+    for (let i = 0; i < dates.length; i++)
+    {
+        if (isInvalidDateCheck(invalidDates, dates[i]))
         {
             invalidReservation = true;
+            break;
         }
-    });
+    }
+
     if (invalidReservation)
     {
         alert("Invalid dates selected");
@@ -185,7 +186,7 @@ async function CalcPrice(start, end, id, invalidDates)
                     body: JSON.stringify({ "id": id })
                 });
             let data2 = await conn2.json();
-            dailyPrice = data2[0]["daily_price"];
+            dailyPrice = data2;
         }
 
         document.getElementById(id).disabled = true;
@@ -283,18 +284,7 @@ async function ReworkList()
                     method: "POST",
                     body: JSON.stringify(availabilityData)
                 });
-            let availabilityResult = await availabilityConn.json();
-            let invalidDates = [];
-            if (availabilityResult.length != 0)
-            {
-                availabilityResult.forEach(e =>
-                {
-                    let start = new Date(e["from_date"]["date"]);
-
-                    let end = new Date(e["to_date"]["date"]);
-                    invalidDates = invalidDates.concat(getDates(start, end));
-                });
-            }
+            let invalidDates = await availabilityConn.json();
 
             $(btn).daterangepicker(
                 {
@@ -306,10 +296,11 @@ async function ReworkList()
                     {
                         if (invalidDates.length != 0)
                         {
-                            if (isInvalidDateCheck(invalidDates, date))
-                            {
-                                return true;
-                            }
+                            date = (new Date(date.format('YYYY-MM-DD')).toLocaleDateString("hu-HU"))
+                                .replaceAll('.', '')
+                                .replaceAll(' ', '-')
+
+                            return isInvalidDateCheck(invalidDates, date);
                         }
                     }
                 },
@@ -432,7 +423,6 @@ async function Discounts()
         let momentDate = moment(tomorrow);
 
         let idToPass = $(btn).val();
-        console.log(idToPass);
 
         let availabilityData =
         {
@@ -443,18 +433,7 @@ async function Discounts()
                 method: "POST",
                 body: JSON.stringify(availabilityData)
             });
-        let availabilityResult = await availabilityConn.json();
-        let invalidDates = [];
-        if (availabilityResult.length != 0)
-        {
-            availabilityResult.forEach(e =>
-            {
-                let start = new Date(e["from_date"]["date"]);
-
-                let end = new Date(e["to_date"]["date"]);
-                invalidDates = invalidDates.concat(getDates(start, end));
-            });
-        }
+        let invalidDates = await availabilityConn.json();
 
         $(btn).daterangepicker(
             {
@@ -466,10 +445,11 @@ async function Discounts()
                 {
                     if (invalidDates.length != 0)
                     {
-                        if (isInvalidDateCheck(invalidDates, date))
-                        {
-                            return true;
-                        }
+                        date = (new Date(date.format('YYYY-MM-DD')).toLocaleDateString("hu-HU"))
+                            .replaceAll('.', '')
+                            .replaceAll(' ', '-')
+
+                        return isInvalidDateCheck(invalidDates, date);
                     }
                 }
             },

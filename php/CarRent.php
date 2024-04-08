@@ -50,24 +50,17 @@ class CarRent
 
     public function Login($username, $pwd)
     {
-        $users = $this->entityManager->getRepository(User::class)->findAll();
-        foreach ($users as $u)
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(["username" => $username]);
+        if (password_verify($pwd, $user->getPassword()))
         {
-            if ($u->getUsername() == $username && $u->getPassword() == $pwd)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }
 
     public function AllCar()
     {
-        $query = $this->qb
-            ->select("c")
-            ->from(Car::class, "c")
-            ->getQuery();
-        $cars = $query->getResult();
+        $cars = $this->entityManager->getRepository(Car::class)->findAll();
 
         $carsAssocArray = [];
         foreach ($cars as $c)
@@ -80,18 +73,18 @@ class CarRent
     public function Categories()
     {
         $categories = $this->entityManager->getRepository(Category::class)->findAll();
-        $categoriesArray = [];
+        $categoriesAssocArray = [];
         foreach ($categories as $ctg)
         {
             array_push(
-                $categoriesArray,
+                $categoriesAssocArray,
                 [
                     "id" => $ctg->getId(),
                     "name" => $ctg->getName()
                 ]
             );
         }
-        return $categoriesArray;
+        return $categoriesAssocArray;
     }
 
     public function Availability($id)
@@ -103,12 +96,13 @@ class CarRent
             ->setParameter(1, $id)
             ->getQuery();
         $result = $query->getResult();
-        $rentals = [];
+        $rentalDates = [];
+
         foreach ($result as $r)
         {
-            array_push($rentals, $r->asAssocArray());
+            array_push($rentalDates, [$r->getFrom_date(), $r->getTo_date()]);
         }
-        return $rentals;
+        return $rentalDates;
     }
 
     public function PreviousRentals($userId)
@@ -131,11 +125,7 @@ class CarRent
 
     public function Discounts()
     {
-        $query = $this->qb
-            ->select("s")
-            ->from(Sale::class, "s")
-            ->getQuery();
-        $sales = $query->getResult();
+        $sales = $this->entityManager->getRepository(Sale::class)->findAll();;
         $salesArray = [];
 
         foreach ($sales as $s)
@@ -147,45 +137,44 @@ class CarRent
 
     public function Price($id)
     {
-        $query = $this->qb
-            ->select("c.daily_price")
-            ->from(Car::class, "c")
-            ->where("c.id = ?1")
-            ->setParameter(1, $id)
-            ->getQuery();
-        $price = $query->getResult();
+        $car = $this->entityManager->getRepository(Car::class)->findOneBy(["id" => $id]);
+        $price = $car->getDaily_price();
         return $price;
     }
 
     public function RentCar($userId, $carId, $fromDate, $toDate, $created)
     {
-        $queryUser = $this->qb
-            ->select("u")
-            ->from(User::class, "u")
-            ->where("u.id = ?1")
-            ->setParameter(1, $userId)
-            ->getQuery();
-        $user = $queryUser->getResult()[0];
-
-        $queryCar = $this->qb
-            ->select("c")
-            ->from(Car::class, "c")
-            ->where("c.id = ?1")
-            ->setParameter(1, $carId)
-            ->getQuery();
-        $car = $queryCar->getResult()[0];
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(["id" => $userId]);
+        $car = $this->entityManager->getRepository(Car::class)->findOneBy(["id" => $carId]);
 
         $rental = new Rental();
-
         $rental->setUser($user);
         $rental->setCar($car);
-
         $rental->setFrom_date($fromDate);
         $rental->setTo_date($toDate);
         $rental->setCreated($created);
+
         $this->entityManager->persist($rental);
         $this->entityManager->flush();
-        return true;
+        return;
+    }
+
+    public function CarsInCategory($category)
+    {
+        $query = $this->qb
+            ->select("c")
+            ->from(Car::class, "c")
+            ->where("c.category = ?1")
+            ->setParameter(1, $category)
+            ->getQuery();
+        $cars = $query->getResult();
+
+        $carsAssocArray = [];
+        foreach ($cars as $c)
+        {
+            array_push($carsAssocArray, $c->asAssocArray());
+        }
+        return $carsAssocArray;
     }
 
     public function CreateDb()
@@ -250,26 +239,8 @@ class CarRent
         {
             $conn->prepare("
                 INSERT INTO `users` (`id`, `username`, `name`, `password`) VALUES
-                (2, 'user', 'Szia Szevasz', 'user123');")
+                (2, 'user', 'Szia Szevasz', '\$2y\$10\$a25ZCv85ZYBRXB9et3Br3OnDRYuJUdtoXRD1bgK9dly8rgeN41GXu');")
                 ->executeStatement();
         }
-    }
-
-    public function CarsInCategory($category)
-    {
-        $query = $this->qb
-            ->select("c")
-            ->from(Car::class, "c")
-            ->where("c.category = ?1")
-            ->setParameter(1, $category)
-            ->getQuery();
-        $cars = $query->getResult();
-
-        $carsAssocArray = [];
-        foreach ($cars as $c)
-        {
-            array_push($carsAssocArray, $c->asAssocArray());
-        }
-        return $carsAssocArray;
     }
 }
