@@ -208,9 +208,17 @@ async function CalcPrice(start, end, id, invalidDates)
                 method: "POST",
                 body: JSON.stringify(send)
             });
+        let rentalSuccess = await connection.json();
+
 
         let dailyPrice;
-        let discountedPrice = document.getElementById(id).getAttribute("name");
+        let discountedPrice = "";
+        try
+        {
+            discountedPrice = document.getElementById(id).getAttribute("name");
+        }
+        catch (e)
+        { }
         if (discountedPrice == "")
         {
             let conn2 = await fetch("php/index.php/price",
@@ -222,20 +230,25 @@ async function CalcPrice(start, end, id, invalidDates)
             dailyPrice = data2;
         }
 
-        document.getElementById(id).disabled = true;
         const date1 = new Date(start.format('MM/DD/YYYY'));
         const date2 = new Date(end.format('MM/DD/YYYY'));
         const diffTime = Math.abs(date2 - date1);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-        if (discountedPrice == "")
+        if (discountedPrice == "" && rentalSuccess)
         {
             alert(`Successful reservation: $${dailyPrice * diffDays}`);
         }
-        else
+        else if (rentalSuccess)
         {
             alert(`Successful reservation: $${discountedPrice * diffDays}`);
         }
+        else
+        {
+            alert("Error reserving car");
+        }
+
+        location.reload();
     }
 }
 

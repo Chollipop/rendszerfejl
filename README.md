@@ -1,6 +1,6 @@
 # Beüzemelés
 - Telepítsük a [XAMPP-ot](https://www.apachefriends.org/download.html)
-- Klónozzuk le a [beadando2](https://github.com/kangurusenpai/group_5/tree/beadando2) branchet
+- Klónozzuk le a [beadando3](https://github.com/kangurusenpai/group_5/tree/beadando3) branchet
 - Másoljuk be a XAMPP htdocs mappájába (alapértelmezetten C:/xampp/htdocs)
 - Indítsuk el a XAMPP-ot, majd azon belül az Apache és MySQL szervereket
 - Az alkalmazás root felhasználónévvel, jelszó nélkül próbál csatlakozni az adatbázishoz

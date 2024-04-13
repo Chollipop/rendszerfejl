@@ -11,7 +11,6 @@ function parseJwt(token)
 {
     try
     {
-        console.log(token);
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c)
@@ -94,7 +93,15 @@ async function addCar()
     });
     if (connection.status == 200)
     {
-        alert("Car added successfully");
+        let data = await connection.json();
+        if (data)
+        {
+            alert("Car added successfully");
+        }
+        else
+        {
+            alert("Error adding car");
+        }
     }
     else if (connection.status == 401)
     {

@@ -175,7 +175,7 @@ class CarRent
         $car = $this->entityManager->getRepository(Car::class)->findOneBy(["id" => $carId]);
         if ($user == null || $car == null)
         {
-            return;
+            return false;
         }
 
         $rental = new Rental();
@@ -187,7 +187,7 @@ class CarRent
 
         $this->entityManager->persist($rental);
         $this->entityManager->flush();
-        return;
+        return true;
     }
 
     public function CarsInCategory($category)
@@ -213,7 +213,16 @@ class CarRent
         $category = $this->entityManager->getRepository(Category::class)->findOneBy(["id" => $categoryId]);
         if ($category == null)
         {
-            return;
+            return false;
+        }
+
+        $brand = filter_var($brand, FILTER_SANITIZE_STRING);
+        $model = filter_var($model, FILTER_SANITIZE_STRING);
+        $daily_price = filter_var($daily_price, FILTER_SANITIZE_NUMBER_INT);
+
+        if ($brand === false || $model === false || $daily_price === false || $daily_price === '' || $daily_price < 0)
+        {
+            return false;
         }
 
         $car = new Car();
@@ -224,7 +233,7 @@ class CarRent
 
         $this->entityManager->persist($car);
         $this->entityManager->flush();
-        return;
+        return true;
     }
 
     public function CreateDb()
