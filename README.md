@@ -5,5 +5,5 @@
 - Indítsuk el a XAMPP-ot, majd azon belül az Apache és MySQL szervereket
 - Az alkalmazás root felhasználónévvel, jelszó nélkül próbál csatlakozni az adatbázishoz
 - Ne legyen autorent nevű adatbázisunk létrehozva, az alkalmazás legenerálja az adatbázist és a táblákat is, melyeket fel is tölt tesztadatokkal
-- Tetszőleges böngészőben localhost-on válasszuk ki a mappán belül az [index.html-t](http://localhost/group_5-beadando1/group_5-beadando1/index.html)
+- Tetszőleges böngészőben localhost-on válasszuk ki a mappán belül az [index.html-t](http://localhost/group_5-beadando3/group_5-beadando3/index.html)
 - Belépési adatok: Sima felhasználó szerepkör: user:user123, admin szerepkör: admin:admin123
